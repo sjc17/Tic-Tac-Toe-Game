@@ -6,6 +6,7 @@ let compChoice;
 // ---------
 // 6 | 7 | 8
 let currentlyPlayerTurn = false;
+let testing = true;
 
 function setupGame() {  
   console.log('setupGame()');
@@ -17,18 +18,15 @@ function setupGame() {
   beginGame();
 }
 
-function beginGame() {
-  console.log('beginGame()');
+function testBeginGame() {
+  console.log('testing beginGame() and minimax()');
   // Clear board
+  let boardArray = [];
   for (i=0,len=document.getElementsByClassName('space').length;i<len;i++) {
-    document.getElementsByClassName('space')[i].innerHTML = '';
+    document.getElementsByClassName('space')[i].innerHTML = '';    
   }
-  if (Math.random() > 0.5) {
-    currentlyPlayerTurn = true;
-  }
-  else {
-    compTurn();
-  }
+  boardArray = ['O','X','O','O','X','O','','','O'];
+  console.log(testMinimax(boardArray, true));
 }
 
 function clickOnSpace(spaceElement) {
@@ -36,11 +34,15 @@ function clickOnSpace(spaceElement) {
   if (currentlyPlayerTurn) {    
     if (spaceElement.innerHTML === '') {
       spaceElement.innerHTML = playerChoice;
+      currentlyPlayerTurn = false;
       console.log('checking if someone won:');
-      if (didSomeoneWin()) {
+      if (someoneWon()) {
         console.log('someone did win');
-        console.log('it was '+didSomeoneWin());
+        console.log('it was '+someoneWon());
         scoreAndNewGame();
+      }
+      else {
+        compTurn();
       }
     }
   }
@@ -64,29 +66,74 @@ function compTurn() {
   for (i=0,len=document.getElementsByClassName('space').length;i<len;i++) {
     boardArray = document.getElementsByClassName('space')[i].innerHTML;
   }
+  document.getElementsByClassName('space')[minimax(boardArray, true)[1]].innerHTML = compChoice;
+  if (someoneWon()) {
+    console.log('someone did win');
+    console.log('it was '+someoneWon());
+    scoreAndNewGame();
+  }
+  else {
+    currentlyPlayerTurn = true;
+  }
 }
 
 function minimax(boardArray, computerIsGoing) {
   console.log('minimax('+boardArray+', '+computerIsGoing+')');
   // computer wants to maximize this value, player wants to minimize
-  if (!boardArray.includes('') || didSomeoneWin()) {
-    if (didSomeoneWin() === playerChoice) {
+  if (!boardArray.includes('') || someoneWon(boardArray)) {
+    if (someoneWon(boardArray) === playerChoice) {
       return [-1, undefined];      
     }
-    else if (didSomeoneWin() === compChoice) {
+    else if (someoneWon(boardArray) === compChoice) {
       return [1, undefined];
     }
     else {
-      return 0;
+      return [0, undefined];
     }
+  }
+  else {
+    let bestValue; // Array of two: 1. heuristic value of next move. 2. position to go for in next move.
+    let nextMove;
+    let nextBoardState;
+    if (computerIsGoing) {
+      bestValue = [-10, undefined];
+      for (i=0;i<9;i++) {
+        if (boardArray[i]==='') {
+          nextBoardState = boardArray.slice(0);
+          nextBoardState[i] = compChoice;
+          nextMove = minimax(nextBoardState, false);   
+          if (bestValue[0] < nextMove[0]) {
+            bestValue = nextMove.slice(0);
+          }
+        }
+      }
+    }
+    else {
+      bestValue = [10, undefined];
+      for (i=0;i<9;i++) {
+        if (boardArray[i]==='') {
+          nextBoardState = boardArray.slice(0);
+          nextBoardState[i] = playerChoice;
+          nextMove = minimax(nextBoardState, true);   
+          if (bestValue[0] > nextMove[0]) {
+            bestValue = nextMove.slice(0);
+          }
+        }
+      }
+    }
+    return bestValue;
   }
 }
 
-function didSomeoneWin() {
-  console.log('didSomeoneWin()');
+function someoneWon(boardArray) {
+  console.log('someoneWon()');
   let s = [];
   for (i=0;i<9;i++) {
     s[i] = document.getElementsByClassName('space')[i].innerHTML;
+  }
+
+  if (boardArray) {
+    s = boardArray;
   }
   
   if ((s[0]===s[1] && s[1]===s[2] && s[0]!=='') ||
@@ -106,10 +153,6 @@ function didSomeoneWin() {
   else {
     return false;
   }
-}
-
-function heuristicValueOfBoard(boardArray) {
-  console.log('heuristicValueOfBoard(boardArray)');
 }
 
 function scoreAndNewGame() {
