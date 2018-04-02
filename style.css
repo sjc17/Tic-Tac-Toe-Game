@@ -1,0 +1,93 @@
+body {
+  background-color: #A0BBFF;
+}
+
+h2 {
+  text-align: center;
+}
+
+#board {
+  display: flex;
+  position: relative;
+  
+  background-color: #203360;
+  width: 300px;
+  height: 300px;
+  margin: 2% auto;  
+}
+
+.space {
+  text-align:center;
+  line-height:100px;
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  font-size: 80px;
+  color: white;
+  user-select: none;
+  border:solid white 1px;
+}
+
+#space-0 {
+  top: 0px;
+  left: 0px;
+}
+
+#space-1 {
+  top: 0px;
+  left: 100px;
+}
+
+#space-2 {
+  top: 0px;
+  left: 200px
+}
+
+#space-3 {
+  top: 100px;
+  left: 0px;
+}
+
+#space-4 {
+  top: 100px;
+  left: 100px;
+}
+
+#space-5 {
+  top: 100px;
+  left: 200px;
+}
+
+#space-6 {
+  top: 200px;
+  left: 0px;
+}
+
+#space-7 {
+  top: 200px;
+  left: 100px;
+}
+
+#space-8 {
+  top: 200px;
+  left: 200px;
+}
+
+#pickXO {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  margin: auto;
+  
+}
+
+#choices-container {
+  display: flex;
+  justify-content: space-evenly;
+  font-size: 48px;
+  user-select: none;
+}
+
+.choices {
+  
+}
