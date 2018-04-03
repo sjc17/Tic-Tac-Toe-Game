@@ -4,7 +4,7 @@
 body {
   background-color: #A0BBFF;
   font-family: 'Roboto', sans-serif;
-
+  text-align: center;
 }
 
 h2 {
@@ -97,11 +97,10 @@ h2 {
 #score {
   text-align: center;
   margin: auto;
-  margin-top: 5%;
+  margin-top: 2%;
 }
 
 #announce {
   text-align: center;
   margin: auto;
-  margin-top: 5%;
 }
