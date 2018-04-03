@@ -8,6 +8,8 @@ let compSymbol;
 let currentlyPlayerTurn = false;
 let testing = true;
 let compHasPlayed;
+let playerScore = 0;
+let compScore = 0;
 
 function setupGame() {
   console.log('setupGame()');
@@ -16,11 +18,13 @@ function setupGame() {
   for ( i=0,  e=document.getElementsByClassName('space');i<9;i++) {
     e[i].style.display = 'block';
   }
+  document.getElementById('score').style.display = 'block';
   beginGame();
 }
 
 function beginGame() {
-  // Clear board
+  document.getElementById('announce').innerHTML = '';
+  // Clear board  
   for (i=0;i<9;i++) {
     document.getElementsByClassName('space')[i].innerHTML = '';    
   }
@@ -43,20 +47,22 @@ function clickOnSpace(spaceElement) {
 }
 
 function compTurn() {
-  console.log('compTurn()');  
-  let currentBoardArray = [];
-  for (i=0,len=document.getElementsByClassName('space').length;i<len;i++) {
-    currentBoardArray[i] = document.getElementsByClassName('space')[i].innerHTML;
-  }
-  winOrBlockWin(currentBoardArray, compSymbol); // Go for the win
-  winOrBlockWin(currentBoardArray, playerSymbol); // Block player's win
-  createFork(currentBoardArray); // Go for a fork
-  blockFork(currentBoardArray); // Block player's fork attempt
-  markCenter(currentBoardArray);
-  oppositeCorner(currentBoardArray);
-  emptyCorner(currentBoardArray);
-  emptySide(currentBoardArray);
-  checkVictorAndNextState();
+  setTimeout(() => {
+    console.log('compTurn()');  
+    let currentBoardArray = [];
+    for (i=0,len=document.getElementsByClassName('space').length;i<len;i++) {
+      currentBoardArray[i] = document.getElementsByClassName('space')[i].innerHTML;
+    }
+    winOrBlockWin(currentBoardArray, compSymbol); // Go for the win
+    winOrBlockWin(currentBoardArray, playerSymbol); // Block player's win
+    createFork(currentBoardArray); // Go for a fork
+    blockFork(currentBoardArray); // Block player's fork attempt
+    markCenter(currentBoardArray);
+    oppositeCorner(currentBoardArray);
+    emptyCorner(currentBoardArray);
+    emptySide(currentBoardArray);
+    checkVictorAndNextState();
+  }, 500);  
 }
 
 function checkBoardUpdate(array) {
@@ -385,8 +391,21 @@ function gameVictor(boardArray) {
 }
 
 function scoreAndNewGame() {
+  
   console.log('scoreAndNewGame()');
-  beginGame();
+  if (gameVictor() === playerSymbol) {
+    playerScore++;
+    document.getElementById('announce').innerHTML = 'You win! How did that happen?';
+  }
+  else if (gameVictor() === compSymbol) {    
+    compScore++;
+    document.getElementById('announce').innerHTML = 'Computer wins!';
+  }
+  else {
+    document.getElementById('announce').innerHTML = 'It\'s a draw!';
+  }
+  document.getElementById('score').innerHTML = "Player Score: " + playerScore + " Computer Score: " + compScore;
+  setTimeout(() => {beginGame()}, 3000);
 }
 
 for (i=0,len=document.getElementsByClassName('space').length;i<len;i++) {
@@ -395,6 +414,9 @@ for (i=0,len=document.getElementsByClassName('space').length;i<len;i++) {
   });
   document.getElementsByClassName('space')[i].style.display = 'none';
 }
+
+document.getElementById('score').innerHTML = "Player Score: " + playerScore + " Computer Score: " + compScore;
+document.getElementById('score').style.display = 'none';
 
 document.getElementsByClassName('choices')[0].addEventListener('click', () => {
   playerSymbol = 'X';  

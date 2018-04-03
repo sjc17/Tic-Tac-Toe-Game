@@ -1,5 +1,10 @@
+@import url('https://fonts.googleapis.com/css?family=Indie+Flower');
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
 body {
   background-color: #A0BBFF;
+  font-family: 'Roboto', sans-serif;
+
 }
 
 h2 {
@@ -7,6 +12,7 @@ h2 {
 }
 
 #board {
+  font-family: 'Indie Flower', cursive;
   display: flex;
   position: relative;
   
@@ -88,6 +94,14 @@ h2 {
   user-select: none;
 }
 
-.choices {
-  
+#score {
+  text-align: center;
+  margin: auto;
+  margin-top: 5%;
+}
+
+#announce {
+  text-align: center;
+  margin: auto;
+  margin-top: 5%;
 }
